@@ -9,6 +9,7 @@ import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.firefox.internal.ProfilesIni;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
 
@@ -19,6 +20,7 @@ public class App {
     public static void main( String[] args ) {
         String someUrl = searchedURL();
         String linkForPage = getLinkForPage(someUrl,5);
+        String itemLink = getItemLink(linkForPage);
 
     }
 
@@ -40,10 +42,15 @@ public class App {
                 symbs.remove(i);
                 i--;
                 if(symbs.get(i+1).equals("&")){
-                    correctPageLink =  correctPageLink+ String.valueOf(page);
+
                     pageNotChanged = false;
                 }
+
+                continue;
+
             }
+
+            correctPageLink =  correctPageLink+ String.valueOf(page);
         }
 
         return correctPageLink;
@@ -106,10 +113,19 @@ public class App {
         }
     }
 
-    public static String itemLink(String searchLink){
+    public static String getItemLink(String searchLink){
         String itemLink="";
         WebDriver driver = getWebDriver();
         driver.get(searchLink);
+
+        WebElement itemListElement = driver.findElement(By.id("s-results-list-atf"));
+        List<WebElement> liElements = itemListElement.findElements(By.tagName("li"));
+
+        WebElement foundElement = liElements.get(9);
+        List<WebElement> aElements = foundElement.findElements(By.tagName("a"));
+        itemLink = aElements.get(0).getAttribute("href");
+
+        driver.quit();
         return itemLink;
 
     }
