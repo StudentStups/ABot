@@ -121,6 +121,13 @@ public class App {
         WebElement itemListElement = driver.findElement(By.id("s-results-list-atf"));
         List<WebElement> liElements = itemListElement.findElements(By.tagName("li"));
 
+        for(WebElement webElement : liElements){
+            if(webElement.getAttribute("data-asign")==null){
+                liElements.remove(webElement);
+            }
+            
+        }
+
         WebElement foundElement = liElements.get(9);
         List<WebElement> aElements = foundElement.findElements(By.tagName("a"));
         itemLink = aElements.get(0).getAttribute("href");
